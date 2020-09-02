@@ -1,4 +1,5 @@
 #https://www.programmareinpython.it/esercizi-python/
+import random
 
 def max2numeri ():
     print("Inserisci valore uno:")
@@ -160,22 +161,124 @@ def geometra():
 def passwordGenerator():
     full_char_table = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!\"#$%&\'()*+,-./:;<=>?@[\\]^_`{|}~"
     alpha_char_table = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
+    psw = ""
 
     sceltaPSW = input('''
     Password generator:
     1- Password semplice? (8 caratteri)
     2- Password difficile? (20 caratteri)
+    3- Scegli lunghezza password
+    4- Esci
     ''')
 
-    if sceltaPSW == 1:
+    if int(sceltaPSW) == 1:
+        print("Hai scelto password semplice: ")
+        for x in range(8):
+            psw += alpha_char_table[int(random.randrange(len(alpha_char_table)))]
+            x += 1
+        print("La password è " + psw)
 
+    if int(sceltaPSW) == 2:
+        print("Hai scelto password difficile: ")
+        for x in range(20):
+            psw += full_char_table[int(random.randrange(len(full_char_table)))]
+            x += 1
+        print("La password è " + psw)
+    
+    if int(sceltaPSW) == 3:
+        pswLength = input("Inserisci lunghezza password: ")
+        for x in range(int(pswLength)):
+            psw += full_char_table[int(random.randrange(len(full_char_table)))]
+            x += 1
+        print("La password è " + psw)
 
-    if sceltaPSW == 2:
-        
+    if int(sceltaPSW) == 4:
+        print("Goodbye!")
+        exit
 
-    else:
-        print("Retry.")
+    else: 
         passwordGenerator()
+
+def fattoriale(num):
+    #iterativa, forumula n(n-1)/2
+    if num == 1:
+        return num
+    else:
+        res = num * fattoriale(num-1)
+        return res
+
+def fibonacci(num):
+    #iterativa, n1=1, n2=2 -> n3= n1+n2
+    if num <= 1:
+        return num
+    else:
+        return fibonacci(num-1) + fibonacci(num-2)
+
+def generateMAC():
+    alpha_char = "0123456789ABCDEF"
+    MAC = ""
+
+    for x in range (6):
+        for x in range (2):
+            MAC += alpha_char[int(random.randrange(len(alpha_char)))]
+        MAC += " : "
+    print("L'indirizzo MAC generato è: " + MAC)
+
+def rimario(lista,parola):
+    rime = []
+    for elemento in lista:
+        if parola[-3:] == elemento[-3:]:
+            rime.append(elemento)
+
+    if not rime:
+            print(f"Non sono state trovate rime con '{parola}'")
+    else:
+            print(f"Le rime trovate con '{parola}' sono {rime}")
+
+def crittografiaROT13():
+    cifrario = {'a':'n', 'b':'o', 'c':'p', 'd':'q', 'e':'r', 'f':'s', 'g':'t', 'h':'u',
+                'i':'v', 'j':'w', 'k':'x', 'l':'y', 'm':'z', 'n':'a', 'o':'b', 'p':'c',
+                'q':'d', 'r':'e', 's':'f', 't':'g', 'u':'h', 'v':'i', 'w':'j', 'x':'k',
+                'y':'l', 'z':'m', 'A':'N', 'B':'O', 'C':'P', 'D':'Q', 'E':'R', 'F':'S',
+                'G':'T', 'H':'U', 'I':'V', 'J':'W', 'K':'X', 'L':'Y', 'M':'Z', 'N':'A',
+                'O':'B', 'P':'C', 'Q':'D', 'R':'E', 'S':'F', 'T':'G', 'U':'H', 'V':'I',
+                'W':'J', 'X':'K', 'Y':'L', 'Z':'M'}
+    
+    scelta = int(input('''
+    Crittografia ROT13
+    1- Codifica una parola
+    2- Decodifica una parola
+    3- Exit
+    '''))
+
+    if scelta == 1:
+        print("Hai scelto Codifica una parola:")
+        msg = input("Inserisci la parola da codificare: ")
+
+        msgCodificato = ""
+        for carattere in msg:
+            if carattere in cifrario:
+                msgCodificato += cifrario[carattere]
+            else:
+                msgCodificato += carattere
+
+        print(msgCodificato)
+
+    if scelta == 2:
+        print("Hai scelto Decodifica una parola:")
+        msg = input("Inserisci il messaggio da decodificare: ")
+
+        msgInChiaro = ""
+        for carattere in msg:
+            if carattere in cifrario:
+                msgInChiaro += cifrario[carattere]
+            else: msgInChiaro += carattere
+
+        print (msgInChiaro)
+
+    
+    if scelta == 3:
+        exit
 
 
 def main():
@@ -190,6 +293,9 @@ def main():
     #maggioreFraTutti(lista)
     #valore = 4
     #checkValoreInLista(valore, lista)
+    #lista = ["ciao", "due", "liao", "viao"]
+    #parola = "ciao"
+    #rimario(lista, parola)
 
     #listaParole = ["ciao", "come", "stai"]
     #aCiascunoIlSuo(listaParole)
@@ -198,11 +304,17 @@ def main():
     #checkPalindromo()
     #linguaggioFurfanti()
     #frequenzimetro()
-    geometra()
+    #geometra()
+    #passwordGenerator()
+    #generateMAC()
+    crittografiaROT13()
 
-
-
-
+    #iterative
+    #num = int(input("Inserisci numero:"))
+    #print(fattoriale(num))
+    #limite = int(input("Inserisci quanti valori vuoi avere: "))
+    #for num in range(1, limite+1):
+    #    print(fibonacci(num))
 
 
 if __name__ == "__main__":
