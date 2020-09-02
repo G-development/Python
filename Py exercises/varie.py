@@ -1,5 +1,8 @@
 #https://www.programmareinpython.it/esercizi-python/
 import random
+import platform #in pcInfos
+import os #in folderWeight
+import smtplib #in postino
 
 def max2numeri ():
     print("Inserisci valore uno:")
@@ -280,6 +283,85 @@ def crittografiaROT13():
     if scelta == 3:
         exit
 
+def timeMaster():
+    print("Time Master \nTutto in secondi.")
+    giorni = int(input("Inserisci il numero di giorni: ")) *24 * 3600
+    ore = int(input("Inserisci il numero di ore: ")) * 3600
+    minuti = int(input("Inserisci il numero di minuti: ")) * 60
+    print(f"Il numero complessivo in secondi è : {giorni + ore + minuti}s")
+
+def americanConverter():
+    metri = float(input("Fornisci in input un valore in metri: "))
+    miglia = metri / 1609.344
+    piedi = metri * 3.280840
+    pollici = metri * 3.280840
+    iarde = metri * 1.093613
+    print(f'''
+    {metri} metri in miglia sono {miglia}
+    {metri} metri in piedi sono {piedi}
+    {metri} metri in pollici sono {pollici}
+    {metri} metri in iarde sono {iarde}
+
+    ''')
+
+def pcInfos():
+    print("Il tuo sistema operativo è " + platform.system())
+    print("La release è " + platform.release())
+    print(f"L'architettura è {platform.architecture()}")
+
+def whatAscii():
+    char = input("Inserisci un carattere: ")
+    print (f"Il carattere '{char}' in codice ASCII è '{ord(char)}'")
+
+def folderWeight():
+    tot = 0
+    folder = os.getcwd()
+    for file in os.listdir(folder):
+        tot += os.path.getsize(os.path.join(folder, file))
+    print (f"La somma delle dimensioni dei file nella directory è: {tot/1048576}MB")
+
+def sellBooks(libreria, libro):
+    #vendi libri
+    vendita = False
+
+    if libro in libreria:
+        vendita = True
+        libreria[libro] -= 1
+        print(f"Il libro {libro} è stato venduto!")
+
+        if libreria[libro] == 0:
+            del libreria[libro]
+    else:
+        print(f"Il libro {libro} non è presente nella nostra libreria, lo ordino")
+        ordini.append(libro)
+        print(f"Da ordinare: {ordini}")
+    print(f"La libreria adesso è così composta: {libreria}")
+    return vendita
+
+def postino():
+    print('''
+    Questa è la funzione Postino: spedisce eMail utilizzando Gmail!
+    Server: smtp.gmail.com
+    Porta: 587
+    Si richiedono: Username, Password, Destinatario, Oggetto e Messaggio da inviare.
+    ''')
+
+    username = input("Inserisci il tuo username: ")
+    password = input("Inserisci la tua password: ")
+    destinatario = input("Inserisci l'email del destinatario: ")
+    oggetto = input("Inserisci l'oggetto della mail: ")
+    messaggio = input("Ora puoi inserire il messaggio che vuoi inviare: ")
+    contenuto = f"Subject: {oggetto}\n\n{messaggio}"
+    print("Sto effettuando la connessione col Server...")
+    email = smtplib.SMTP("smtp.gmail.com",587)
+    email.ehlo()
+    email.starttls()
+    email.login(username,password)
+    print("Sto inviando...")
+    email.sendmail(username, destinatario, contenuto)
+    email.quit()
+    print("Messaggio Inviato!")
+
 
 def main():
     #max2numeri()
@@ -296,9 +378,12 @@ def main():
     #lista = ["ciao", "due", "liao", "viao"]
     #parola = "ciao"
     #rimario(lista, parola)
-
     #listaParole = ["ciao", "come", "stai"]
     #aCiascunoIlSuo(listaParole)
+    #libreria = {"libro1": 10 , "libro2": 22 , "libro3": 1}
+    #ordini = []
+    #libro = "libro4"
+    #sellBooks(libreria, libro)
 
     #stringReverser()
     #checkPalindromo()
@@ -307,7 +392,12 @@ def main():
     #geometra()
     #passwordGenerator()
     #generateMAC()
-    crittografiaROT13()
+    #crittografiaROT13()
+    #timeMaster()
+    #americanConverter()
+    #pcInfos()
+    #whatAscii()
+    #folderWeight()
 
     #iterative
     #num = int(input("Inserisci numero:"))
@@ -315,6 +405,8 @@ def main():
     #limite = int(input("Inserisci quanti valori vuoi avere: "))
     #for num in range(1, limite+1):
     #    print(fibonacci(num))
+
+    postino()
 
 
 if __name__ == "__main__":
