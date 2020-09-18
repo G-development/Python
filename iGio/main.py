@@ -3,11 +3,11 @@ import telegram
 from telegram import ReplyKeyboardMarkup, ReplyKeyboardRemove
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters, ConversationHandler
 
-from ig_get import *
+from ig_get import getUserLink
 
 
-x = getUserLink("anabnormalguy")
-print (x)
+#x = getUserLink("anabnormalguy")
+#print (x)
 
 TOKEN = "1335344501:AAE9Ig5azZFQha_nvFwdu_mfT8RUxVCBwIo"
 bot = telegram.Bot(token = TOKEN)
@@ -25,15 +25,15 @@ Consult the command list.
 Support me on PayPal
 """
 
-CHOICE, USER = range(2)
+CHOICE, USER, CHECK = range(3)
+user_input_text = ""
 
 def start(update, context):
     reply_keyboard = [['See stories', 'Most liked post', 'etc']]
 
     context.bot.send_message(chat_id=update.effective_chat.id, text = welcomeMsg)
-    update.message.reply_text(
-        'Make your choice',
-        reply_markup=ReplyKeyboardMarkup(reply_keyboard, one_time_keyboard=True))
+    update.message.reply_text('Make your choice',
+                              reply_markup=ReplyKeyboardMarkup(reply_keyboard, one_time_keyboard=True))
 
     return CHOICE
 
@@ -46,16 +46,35 @@ def choice(update, context):
     update.message.reply_text('Input a IG Username',
                               reply_markup=ReplyKeyboardRemove())
 
-    
     return USER
 
 def stories(update, context):
     user = update.message.from_user
     logger.info("Ig username of %s: %s", user.first_name, update.message.text)
-    update.message.reply_text('')
+    user_input_text = update.message.text
 
-    return ConversationHandler.END
+    update.message.reply_text(f'Did you say {logger.info(f"Check username of %s: {user_input_text}", user.first_name)}?')
+    print(user_input_text)
 
+    reply_keyboard = [['Yes', 'No']]
+    update.message.reply_text('Is it correct?',
+                              reply_markup=ReplyKeyboardMarkup(reply_keyboard, one_time_keyboard=True))
+
+    return CHECK
+
+def check_user(update, context):
+    user = update.message.from_user
+    logger.info("Sì / No of %s: %s", user.first_name, update.message.text)
+    user_input_text = update.message.text
+
+    if user_input_text == "Yes":
+        update.message.reply_text('Alright!',
+                                reply_markup=ReplyKeyboardRemove())
+        return CHOICE
+    elif user_input_text == "No":
+        update.message.reply_text('Input IG Username:',
+                                    reply_markup=ReplyKeyboardRemove())
+        return USER
 
 
 def cancel(update, context):
@@ -76,15 +95,17 @@ def main():
             states={
                 CHOICE: [MessageHandler(Filters.regex('^(See stories|Most liked post|etc)$'), choice)],
 
-                USER: [MessageHandler(Filters.text, stories)]
+                USER: [MessageHandler(Filters.text, stories)],
+
+                CHECK: [MessageHandler(Filters.regex('^(Yes|No)$'), check_user)]
             },
 
             fallbacks=[CommandHandler('cancel', cancel)]
         )
 
     dp.add_handler(conv_handler)
+    dp.add_handler(CommandHandler("start", start))
 
-    #dp.add_handler(CommandHandler("start", start))
     #dp.add_handler(CommandHandler("favourites", favorites))
     #dp.add_handler(CommandHandler("choice", choice))
 

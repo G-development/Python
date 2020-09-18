@@ -9,8 +9,6 @@ def getUserLink(user):
 
 def getStories(user):
     userStoriesLink = f"http://instagram.com/stories/{user}/"
-
-    print(userStoriesLink)
     return userStoriesLink
 
 
@@ -18,4 +16,4 @@ def getStories(user):
 
 
 #getUserLink("ciao")
-getStories("anabnormalguy")
+#getStories("anabnormalguy")
