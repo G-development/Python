@@ -25,19 +25,19 @@ Consult the command list.
 Support me on PayPal
 """
 
-CHOICE, USER, CHECK = range(3)
+CHOICE, USER, CHECK, SEND = range(4)
 user_input_text = ""
 
 def start(update, context):
     reply_keyboard = [['See stories', 'Most liked post', 'etc']]
+
+    context.bot.send_photo(chat_id=update.effective_chat.id, photo="https://rb.gy/1kdrnf")
 
     context.bot.send_message(chat_id=update.effective_chat.id, text = welcomeMsg)
     update.message.reply_text('Make your choice',
                               reply_markup=ReplyKeyboardMarkup(reply_keyboard, one_time_keyboard=True))
 
     return CHOICE
-
-
 
 def choice(update, context):
     user = update.message.from_user
@@ -53,8 +53,8 @@ def stories(update, context):
     logger.info("Ig username of %s: %s", user.first_name, update.message.text)
     user_input_text = update.message.text
 
-    update.message.reply_text(f'Did you say {logger.info(f"Check username of %s: {user_input_text}", user.first_name)}?')
-    print(user_input_text)
+    update.message.reply_text(f'Did you say {user_input_text}?')
+    #print (logger.info(f"Check username of %s: %s", user.first_name, user_input_text))
 
     reply_keyboard = [['Yes', 'No']]
     update.message.reply_text('Is it correct?',
@@ -64,18 +64,25 @@ def stories(update, context):
 
 def check_user(update, context):
     user = update.message.from_user
-    logger.info("Sì / No of %s: %s", user.first_name, update.message.text)
+    logger.info("Yes / No of %s: %s", user.first_name, update.message.text)
     user_input_text = update.message.text
 
     if user_input_text == "Yes":
         update.message.reply_text('Alright!',
                                 reply_markup=ReplyKeyboardRemove())
-        return CHOICE
+        return SEND
     elif user_input_text == "No":
         update.message.reply_text('Input IG Username:',
                                     reply_markup=ReplyKeyboardRemove())
         return USER
 
+
+def send_stories(update, context):
+    user = update.message.from_user
+    logger.info("Start ig stories of %s: %s", user.first_name, update.message.text)
+
+    update.message.reply_text('ok', reply_markup=ReplyKeyboardRemove())
+    return CHOICE
 
 def cancel(update, context):
     user = update.message.from_user
@@ -84,6 +91,7 @@ def cancel(update, context):
                               reply_markup=ReplyKeyboardRemove())
 
     return ConversationHandler.END
+
 
 def main():
     updater = Updater(token = TOKEN, use_context=True)
@@ -97,7 +105,9 @@ def main():
 
                 USER: [MessageHandler(Filters.text, stories)],
 
-                CHECK: [MessageHandler(Filters.regex('^(Yes|No)$'), check_user)]
+                CHECK: [MessageHandler(Filters.regex('^(Yes|No)$'), check_user)],
+
+                SEND: [MessageHandler(Filters.text, send_stories)]
             },
 
             fallbacks=[CommandHandler('cancel', cancel)]
