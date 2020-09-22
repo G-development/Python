@@ -23,8 +23,8 @@ def checkPrice():
 def sendMail():
     print ("Funzione sendMail() usando Gmail")
 
-    username = "cuozzogiovanni03"
-    password = "Giovils3520"
+    username = ""
+    password = ""
     destinatario = "cuozzogiovanni03@gmail.com"
     oggetto = "Price fell down!"
     messaggio = f"Il prezzo è diminuito! + str(title.strip()) + str(conv_price)"
