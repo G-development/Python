@@ -9,7 +9,7 @@ from ig_get import getUserLink
 #x = getUserLink("anabnormalguy")
 #print (x)
 
-TOKEN = "1335344501:AAE9Ig5azZFQha_nvFwdu_mfT8RUxVCBwIo"
+TOKEN = ""
 bot = telegram.Bot(token = TOKEN)
 headers = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.149 Safari/537.36"}
 
